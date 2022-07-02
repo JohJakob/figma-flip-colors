@@ -1,21 +1,80 @@
-// This plugin creates 5 rectangles on the screen.
-const numberOfRectangles = 5
+import clone from './clone';
 
-// This file holds the main code for the plugins. It has access to the *document*.
-// You can access browser APIs such as the network by creating a UI which contains
-// a full browser environment (see documentation).
+// Get fill colors of selection as String Array
+const getColorsRecursively = (selection) => {
+  let fills = [];
 
-const nodes: SceneNode[] = [];
-for (let i = 0; i < numberOfRectangles; i++) {
-  const rect = figma.createRectangle();
-  rect.x = i * 150;
-  rect.fills = [{type: 'SOLID', color: {r: 1, g: 0.5, b: 0}}];
-  figma.currentPage.appendChild(rect);
-  nodes.push(rect);
+  for (const node of selection) {
+    // Recursively get fill colors of child nodes
+    if ("children" in node && node.visible) {
+      fills.push(getColorsRecursively(node.children).flat());
+    }
+
+    // Get fill color when node is visible
+    if ("fills" in node && node.visible) {
+      fills.push(JSON.stringify(node.fills));
+    }
+  }
+
+  return fills;
 }
-figma.currentPage.selection = nodes;
-figma.viewport.scrollAndZoomIntoView(nodes);
 
-// Make sure to close the plugin when you're done. Otherwise the plugin will
-// keep running, which shows the cancel button at the bottom of the screen.
+// Flip two fill colors in selection
+const flipColors = (selection, allFills) => {
+  const newSelection = selection.slice();
+
+  for (const node of newSelection) {
+    // Recursively flip fill colors in child nodes
+    if ("children" in node && node.visible) {
+      flipColors(node.children, allFills);
+    }
+
+    // Flip fill colors when node is visible
+    if ("fills" in node && node.visible) {
+      let fills = clone(node.fills);
+
+      fills.forEach((fill, index) => {
+        if (JSON.stringify(fill) === JSON.stringify(allFills[0])) {
+          fills[index] = allFills[1];
+        } else if (JSON.stringify(fill) === JSON.stringify(allFills[1])) {
+          fills[index] = allFills[0];
+        }
+      });
+
+      node.fills = fills;
+    }
+  }
+
+  return newSelection;
+}
+
+if (figma.currentPage.selection.length === 0) {
+  figma.closePlugin("You have not selected anything.");
+}
+
+// Workaround: Get fill colors as String Array and add them to a set to remove duplicates
+let allFillsStringified = getColorsRecursively(figma.currentPage.selection).flat();
+let allFillsSet = new Set();
+let allFills = [];
+
+allFillsStringified.forEach((e) => {
+  allFillsSet.add(e);
+});
+
+// Parse stringified unique fill colors as objects
+allFillsSet.forEach((e: string) => {
+  allFills.push(JSON.parse(e));
+})
+
+allFills = allFills.flat();
+
+// TODO: Extend plugin to let user choose which colors to flip when there are more than two colors in the selection
+if (allFills.length > 2) {
+  figma.closePlugin("Your selection contains more than 2 fills.");
+} else if (allFills.length < 2) {
+  figma.closePlugin("Your selection contains less than 2 fills.");
+} else {
+  figma.currentPage.selection = flipColors(figma.currentPage.selection, allFills);
+}
+
 figma.closePlugin();
