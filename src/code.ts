@@ -14,7 +14,7 @@ const getColorsRecursively = (selection) => {
     }
 
     // Only process visible nodes
-    if (node.visible) {
+    if (node.type !== "GROUP" && node.visible) {
       // Get fill colors
       if (node.fillStyleId === figma.mixed) {
         // Ignore multiple fill style IDs for now
@@ -52,8 +52,6 @@ const getColorsRecursively = (selection) => {
     }
   }
 
-  console.log(colors);
-
   return colors;
 }
 
@@ -69,10 +67,9 @@ const flipColors = (selection, colors) => {
     }
 
     // Only process visible nodes
-    if (node.visible) {
+    if (node.type !== "GROUP" && node.visible) {
       let fills = clone(node.fills);
       let fillStyleId = clone(node.fillStyleId);
-
       let strokes = clone(node.strokes);
       let strokeStyleId = clone(node.strokeStyleId);
 
@@ -190,8 +187,6 @@ allColorsSet.forEach((e: string) => {
 })
 
 allColors = allColors.flat();
-
-console.log(allColors);
 
 // TODO: Extend plugin to let user choose which colors to flip when there are more than two colors in the selection
 if (allColors.length > 2) {
