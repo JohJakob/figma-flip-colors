@@ -37,8 +37,12 @@ const getColorsRecursively = (selection) => {
         // Get fill style ID
         colors.push(styleIdPrefix + node.fillStyleId);
       } else if ("fills" in node) {
-        // Get fill colors
-        colors.push(JSON.stringify(node.fills));   
+        // Get visible fill colors
+        node.fills.forEach((e) => {
+          if (e.visible) {
+            colors.push(JSON.stringify(e));
+          }
+        });
       }
 
       // Get stroke colors
@@ -46,8 +50,12 @@ const getColorsRecursively = (selection) => {
         // Get stroke style ID
         colors.push(styleIdPrefix + node.strokeStyleId);
       } else if ("strokes" in node) {
-        // Get stroke colors
-        colors.push(JSON.stringify(node.strokes));
+        // Get visible stroke colors
+        node.strokes.forEach((e) => {
+          if (e.visible) {
+            colors.push(JSON.stringify(e));
+          }
+        });
       }
     }
   }
