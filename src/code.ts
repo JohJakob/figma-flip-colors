@@ -18,7 +18,7 @@ const getColorsRecursively = (selection) => {
       // Get fill colors
       if (node.fillStyleId === figma.mixed) {
         // Ignore multiple fill style IDs for now
-        figma.notify("Multiple color styles in one object are not supported yet.");
+        figma.notify("Multiple colour styles in one object are not supported yet.");
 
         /*
         // Get fill style ID of first character of text nodes with multiple fill style IDs
@@ -198,9 +198,9 @@ allColors = allColors.flat();
 
 // TODO: Extend plugin to let user choose which colors to flip when there are more than two colors in the selection
 if (allColors.length > 2) {
-  figma.closePlugin("Your selection contains more than 2 colors.");
+  figma.closePlugin("Your selection contains more than 2 colours.");
 } else if (allColors.length < 2) {
-  figma.closePlugin("Your selection contains less than 2 colors.");
+  figma.closePlugin("Your selection contains less than 2 colours.");
 } else {
   figma.currentPage.selection = flipColors(figma.currentPage.selection, allColors);
 }
