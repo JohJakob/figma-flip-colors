@@ -4,7 +4,8 @@
   "description": "Flip fill colors in selection",
   "main": "code.js",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack --mode production",
+    "watch": "webpack --mode development --watch"
   },
   "author": "Johannes Jakob",
   "license": "MIT",
