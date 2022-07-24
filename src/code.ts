@@ -1,6 +1,7 @@
 import clone from './clone';
 
-let styleIdPrefix = "styleId:";
+const styleIdType = "styleId";
+const colorType = "color";
 
 // Get colors of selection as String Array
 const getColorsRecursively = (selection) => {
@@ -35,12 +36,12 @@ const getColorsRecursively = (selection) => {
         */
       } else if (node.fillStyleId.length > 0) {
         // Get fill style ID
-        colors.push(styleIdPrefix + node.fillStyleId);
+        colors.push({ type: styleIdType, value: node.fillStyleId });
       } else if ("fills" in node) {
         // Get visible fill colors
         node.fills.forEach((e) => {
           if (e.visible) {
-            colors.push(JSON.stringify(e));
+            colors.push({ type: colorType, value: JSON.stringify(e) });
           }
         });
       }
@@ -48,12 +49,12 @@ const getColorsRecursively = (selection) => {
       // Get stroke colors
       if (node.strokeStyleId.length > 0) {
         // Get stroke style ID
-        colors.push(styleIdPrefix + node.strokeStyleId);
+        colors.push({ type: styleIdType, value: node.strokeStyleId });
       } else if ("strokes" in node) {
         // Get visible stroke colors
         node.strokes.forEach((e) => {
           if (e.visible) {
-            colors.push(JSON.stringify(e));
+            colors.push({ type: colorType, value: JSON.stringify(e) });
           }
         });
       }
@@ -85,35 +86,35 @@ const flipColors = (selection, colors) => {
       if (fillStyleId === figma.mixed) {
         // Ignore multiple fill style IDs for now
       } else if (fillStyleId !== figma.mixed && fillStyleId.length > 0) {
-        if (fillStyleId === colors[0]) {
-          if (typeof colors[1] === "string") {
-            fillStyleId = colors[1];
+        if (fillStyleId === colors[0].value) {
+          if (colors[1].type === styleIdType) {
+            fillStyleId = colors[1].value;
           } else {
-            fills[0] = colors[1];
+            fills[0] = colors[1].value;
             fillStyleId = "";
           }
-        } else if (fillStyleId === colors[1]) {
-          if (typeof colors[0] === "string") {
-            fillStyleId = colors[0];
+        } else if (fillStyleId === colors[1].value) {
+          if (colors[0].type === styleIdType) {
+            fillStyleId = colors[0].value;
           } else {
-            fills[0] = colors[0];
+            fills[0] = colors[0].value;
             fillStyleId = "";
           }
         }
       } else if ("fills" in node) {
         fills.forEach((fill, index) => {
-          if (JSON.stringify(fill) === JSON.stringify(colors[0])) {
-            if (typeof colors[1] === "string") {
-              fillStyleId = colors[1];
+          if (JSON.stringify(fill) === JSON.stringify(colors[0].value)) {
+            if (colors[1].type === styleIdType) {
+              fillStyleId = colors[1].value;
             } else {
-              fills[index] = colors[1];
+              fills[index] = colors[1].value;
               fillStyleId = "";
             }
-          } else if (JSON.stringify(fill) === JSON.stringify(colors[1])) {
-            if (typeof colors[0] === "string") {
-              fillStyleId = colors[0];
+          } else if (JSON.stringify(fill) === JSON.stringify(colors[1].value)) {
+            if (colors[0].type === styleIdType) {
+              fillStyleId = colors[0].value;
             } else {
-              fills[index] = colors[0];
+              fills[index] = colors[0].value;
               fillStyleId = "";
             }
           }
@@ -122,35 +123,35 @@ const flipColors = (selection, colors) => {
 
       // Set stroke colors
       if (strokeStyleId.length > 0) {
-        if (strokeStyleId === colors[0]) {
-          if (typeof colors[1] === "string") {
-            strokeStyleId = colors[1];
+        if (strokeStyleId === colors[0].value) {
+          if (colors[1].type === styleIdType) {
+            strokeStyleId = colors[1].value;
           } else {
-            strokes[0] = colors[1];
+            strokes[0] = colors[1].value;
             strokeStyleId = "";
           }
         } else if (strokeStyleId === colors[1]) {
-          if (typeof colors[0] === "string") {
-            strokeStyleId = colors[0];
+          if (colors[0].type === styleIdType) {
+            strokeStyleId = colors[0].value;
           } else {
-            strokes[0] = colors[1];
+            strokes[0] = colors[1].value;
             strokeStyleId = "";
           }
         }
       } else if ("strokes" in node) {
         strokes.forEach((stroke, index) => {
-          if (JSON.stringify(stroke) === JSON.stringify(colors[0])) {
-            if (typeof colors[1] === "string") {
-              strokeStyleId = colors[1];
+          if (JSON.stringify(stroke) === JSON.stringify(colors[0].value)) {
+            if (colors[1].type === styleIdType) {
+              strokeStyleId = colors[1].value;
             } else {
-              strokes[index] = colors[1];
+              strokes[index] = colors[1].value;
               strokeStyleId = "";
             }
-          } else if (JSON.stringify(stroke) === JSON.stringify(colors[1])) {
-            if (typeof colors[0] === "string") {
-              strokeStyleId = colors[0];
+          } else if (JSON.stringify(stroke) === JSON.stringify(colors[1].value)) {
+            if (colors[0].type === styleIdType) {
+              strokeStyleId = colors[0].value;
             } else {
-              strokes[index] = colors[0];
+              strokes[index] = colors[0].value;
               strokeStyleId = "";
             }
           }
@@ -184,13 +185,11 @@ allColorsStringified.forEach((e) => {
 });
 
 // Parse stringified unique fill colors as objects
-allColorsSet.forEach((e: string) => {
-  if (e.includes(styleIdPrefix)) {
-    let styleId = e.substring(styleIdPrefix.length);
-
-    allColors.push(styleId);
+allColorsSet.forEach((e: { type: string, value: string }) => {
+  if (e.type === styleIdType) {
+    allColors.push(e);
   } else {
-    allColors.push(JSON.parse(e));
+    allColors.push({ type: colorType, value: JSON.parse(e.value) });
   }
 })
 
