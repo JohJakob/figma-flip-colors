@@ -1,6 +1,6 @@
 {
   "name": "figma-flip-colors",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Flip the selection colors in Figma",
   "main": "code.js",
   "scripts": {
