@@ -1,7 +1,7 @@
 {
   "name": "Flip Colors",
   "id": "1124356039161054553",
-  "api": "1.0.0",
+  "api": "1.0.1",
   "main": "dist/code.js",
   "editorType": [
     "figma"
