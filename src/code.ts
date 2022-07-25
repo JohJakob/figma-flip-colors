@@ -122,7 +122,9 @@ const flipColors = (selection, colors) => {
       }
 
       // Set stroke colors
-      if (strokeStyleId.length > 0) {
+      if (strokeStyleId === figma.mixed) {
+        // Ignore multiple stroke style IDs for now
+      } else if (strokeStyleId !== figma.mixed && strokeStyleId.length > 0) {
         if (strokeStyleId === colors[0].value) {
           if (colors[1].type === styleIdType) {
             strokeStyleId = colors[1].value;
@@ -130,11 +132,11 @@ const flipColors = (selection, colors) => {
             strokes[0] = colors[1].value;
             strokeStyleId = "";
           }
-        } else if (strokeStyleId === colors[1]) {
+        } else if (strokeStyleId === colors[1].value) {
           if (colors[0].type === styleIdType) {
             strokeStyleId = colors[0].value;
           } else {
-            strokes[0] = colors[1].value;
+            strokes[0] = colors[0].value;
             strokeStyleId = "";
           }
         }
