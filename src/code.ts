@@ -178,22 +178,30 @@ if (figma.currentPage.selection.length === 0) {
 }
 
 // Workaround: Get colors as String Array and add them to a set to remove duplicates
-let allColorsStringified = getColorsRecursively(figma.currentPage.selection).flat();
-let allColorsSet = new Set();
+let allColorsUnfiltered = getColorsRecursively(figma.currentPage.selection).flat();
+
+let plainColorSet = new Set();
+let styleIdSet = new Set();
+
 let allColors = [];
 
-allColorsStringified.forEach((e) => {
-  allColorsSet.add(e);
+allColorsUnfiltered.forEach((e: { type: string, value: string }) => {
+  if (e.type === colorType) {
+    plainColorSet.add(e.value);
+  } else if (e.type === styleIdType) {
+    styleIdSet.add(e.value);
+  }
 });
 
-// Parse stringified unique fill colors as objects
-allColorsSet.forEach((e: { type: string, value: string }) => {
-  if (e.type === styleIdType) {
-    allColors.push(e);
-  } else {
-    allColors.push({ type: colorType, value: JSON.parse(e.value) });
-  }
-})
+// Parse stringified unique plain colors as objects and add them to color array
+plainColorSet.forEach((e: string) => {
+  allColors.push({ type: colorType, value: JSON.parse(e) });
+});
+
+// Add unique style IDs to color array
+styleIdSet.forEach((e: string) => {
+  allColors.push({ type: styleIdType, value: e });
+});
 
 allColors = allColors.flat();
 
