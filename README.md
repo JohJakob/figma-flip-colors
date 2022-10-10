@@ -4,7 +4,7 @@ _[Figma](https://figma.com/about) plugin to flip your selection colours with eas
 
 ![Plugin Cover](/assets/cover.png)
 
-[Try out in Figma](https://figma.com/community/plugin/1124356039161054553)
+[Try it out in Figma](https://figma.com/community/plugin/1124356039161054553)
 
 ## Features
 
