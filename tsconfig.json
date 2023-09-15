@@ -1,12 +1,27 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "jsx": "react",
-    "lib": ["es6", "es2019"],
     "typeRoots": [
+      "./node_modules/bun-types",
       "./node_modules/@types",
       "./node_modules/@figma"
-    ]
+    ],
+
+    "lib": ["esnext"],
+    "module": "esnext",
+    "target": "esnext",
+    
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "moduleDetection": "force",
+
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "esModuleInterop": true,
+
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }
