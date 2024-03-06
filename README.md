@@ -11,9 +11,9 @@ _[Figma](https://figma.com/about) plugin to flip your selection colours with eas
 - Flip the two colours in your selection
 - Works with regular fills and strokes as well as library colour styles
 
-## Notes
-
-The plugin ignores invisible colours, layers, and layers inside boolean operation groups.
+> **Note**
+>
+> The plugin ignores invisible colours, layers, and layers inside boolean operation groups.
 
 ## Roadmap
 
