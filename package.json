@@ -10,10 +10,14 @@
   "author": "Johannes Jakob",
   "license": "MIT",
   "devDependencies": {
-    "@figma/plugin-typings": "^1.68.0",
+    "@figma/eslint-plugin-figma-plugins": "^0.14.0",
+    "@figma/plugin-typings": "^1.88.0",
     "@types/node": "^16.7.1",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
     "bun-types": "^1.0.1",
-    "typescript": "^5.2.2"
+    "eslint": "^8.57.0",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "@types/react": "^17.0.19",

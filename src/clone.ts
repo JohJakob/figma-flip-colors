@@ -11,7 +11,7 @@ function clone(val) {
     } else if (val instanceof Uint8Array) {
       return new Uint8Array(val)
     } else {
-      let o = {}
+      const o = {}
       for (const key in val) {
         o[key] = clone(val[key])
       }
